@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "pokemon search app backend api service",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server/server.js",
@@ -24,6 +25,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status": "^1.7.4",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pokedex-promise-v2": "^4.2.0"
   }
 }
