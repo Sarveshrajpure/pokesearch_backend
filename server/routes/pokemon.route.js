@@ -4,4 +4,6 @@ const router = express.Router();
 
 router.get("/getallpokemons", pokemonController.getAllPokemons);
 
+router.get("/searchpokemon", pokemonController.searchPokemon);
+
 export { router as pokemonRoute };

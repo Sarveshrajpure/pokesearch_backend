@@ -1,34 +1,69 @@
 import httpStatus from "http-status";
 import pokeApi from "../utils/pokedexPromise.js";
+import { getAllPokemonsSchema, searchPokemonSchema } from "../validations/pokemonValidations.js";
 
 const pokemonController = {
   async getAllPokemons(req, res, next) {
     try {
-      const pokemons = await pokeApi.getResource(["/api/v2/pokemon/?limit=5&offset=0"]);
+      const values = await getAllPokemonsSchema.validateAsync(req.query);
 
-      const pokemonNames = pokemons[0].results.map((item) => {
-        return item.name;
-      });
+      const pokemons = await pokeApi.getResource([
+        `/api/v2/pokemon/?limit=${values.limit}&offset=${values.offset}`,
+      ]);
+
+      const pokemonNames = [];
+
+      for (let i = 0; i < pokemons[0].results.length; i++) {
+        pokemonNames.push(pokemons[0].results[i].name);
+      }
 
       const allPokemonDetails = await pokeApi.getPokemonByName(pokemonNames);
+
       const finalPokemonDetails = [];
+
       finalPokemonDetails.push({ count: pokemons[0].count });
-      finalPokemonDetails[0].results = allPokemonDetails.map((item) => {
-        return {
-          name: item.name,
-          sprites: item.sprites.other["official-artwork"],
-          height: item.height,
-          weight: item.weight,
-          stats: item.stats,
-          species: item.species,
-          type: item.type,
-          abilities: item.abilities,
-        };
-      });
+
+      finalPokemonDetails[0].results = [];
+
+      for (let i = 0; i < allPokemonDetails.length; i++) {
+        finalPokemonDetails[0].results.push({
+          name: allPokemonDetails[i].name,
+          sprites: allPokemonDetails[i].sprites.other["official-artwork"],
+          height: allPokemonDetails[i].height,
+          weight: allPokemonDetails[i].weight,
+          stats: allPokemonDetails[i].stats,
+          species: allPokemonDetails[i].species,
+          type: allPokemonDetails[i].type,
+          abilities: allPokemonDetails[i].abilities,
+        });
+      }
 
       res.status(httpStatus.OK).send(finalPokemonDetails);
     } catch (err) {
       console.log(err);
+      next(err);
+    }
+  },
+
+  async searchPokemon(req, res, next) {
+    try {
+      const values = await searchPokemonSchema.validateAsync(req.query);
+
+      const pokemon = await pokeApi.getPokemonByName(values.name);
+
+      const pokemonDetails = {
+        name: pokemon.name,
+        sprites: pokemon.sprites.other["official-artwork"],
+        height: pokemon.height,
+        weight: pokemon.weight,
+        stats: pokemon.stats,
+        species: pokemon.species,
+        type: pokemon.type,
+        abilities: pokemon.abilities,
+      };
+
+      res.status(httpStatus.OK).send(pokemonDetails);
+    } catch (err) {
       next(err);
     }
   },
