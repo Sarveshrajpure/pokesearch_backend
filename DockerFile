@@ -8,5 +8,5 @@ WORKDIR /opt/server/backend-test
 COPY . .
 
 RUN npm install
-EXPOSE 443
+EXPOSE 8080
 CMD [ "node", "./server/server.js" ]
