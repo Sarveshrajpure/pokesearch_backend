@@ -27,13 +27,14 @@ const pokemonController = {
 
       for (let i = 0; i < allPokemonDetails.length; i++) {
         finalPokemonDetails[0].results.push({
+          id: allPokemonDetails[i].id,
           name: allPokemonDetails[i].name,
           sprites: allPokemonDetails[i].sprites.other["official-artwork"],
           height: allPokemonDetails[i].height,
           weight: allPokemonDetails[i].weight,
           stats: allPokemonDetails[i].stats,
           species: allPokemonDetails[i].species,
-          type: allPokemonDetails[i].type,
+          types: allPokemonDetails[i].types,
           abilities: allPokemonDetails[i].abilities,
         });
       }
@@ -51,16 +52,23 @@ const pokemonController = {
 
       const pokemon = await pokeApi.getPokemonByName(values.name);
 
-      const pokemonDetails = {
+      const pokemonDetails = [
+        {
+          results: [],
+        },
+      ];
+
+      pokemonDetails[0].results.push({
+        id: pokemon.id,
         name: pokemon.name,
         sprites: pokemon.sprites.other["official-artwork"],
         height: pokemon.height,
         weight: pokemon.weight,
         stats: pokemon.stats,
         species: pokemon.species,
-        type: pokemon.type,
+        types: pokemon.types,
         abilities: pokemon.abilities,
-      };
+      });
 
       res.status(httpStatus.OK).send(pokemonDetails);
     } catch (err) {
