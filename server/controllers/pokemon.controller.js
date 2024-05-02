@@ -58,21 +58,27 @@ const pokemonController = {
         },
       ];
 
-      pokemonDetails[0].results.push({
-        id: pokemon.id,
-        name: pokemon.name,
-        sprites: pokemon.sprites.other["official-artwork"],
-        height: pokemon.height,
-        weight: pokemon.weight,
-        stats: pokemon.stats,
-        species: pokemon.species,
-        types: pokemon.types,
-        abilities: pokemon.abilities,
-      });
+      if (pokemon.name) {
+        pokemonDetails[0].results.push({
+          id: pokemon.id,
+          name: pokemon.name,
+          sprites: pokemon.sprites.other["official-artwork"],
+          height: pokemon.height,
+          weight: pokemon.weight,
+          stats: pokemon.stats,
+          species: pokemon.species,
+          types: pokemon.types,
+          abilities: pokemon.abilities,
+        });
+      }
 
       res.status(httpStatus.OK).send(pokemonDetails);
     } catch (err) {
-      next(err);
+      if (err.response.status === httpStatus.NOT_FOUND) {
+        res.status(httpStatus.NO_CONTENT).send("cannot find this pokemon");
+      } else {
+        next(err);
+      }
     }
   },
 };
