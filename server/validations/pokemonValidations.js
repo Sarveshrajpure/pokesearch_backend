@@ -7,4 +7,5 @@ export const getAllPokemonsSchema = Joi.object({
 
 export const searchPokemonSchema = Joi.object({
   name: Joi.string().max(100).required(),
+  pokeDetails: Joi.array(),
 });

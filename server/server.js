@@ -3,12 +3,12 @@ const app = express();
 import cors from "cors";
 import { routes } from "./routes/index.js";
 import { convertToApiError, handleError } from "./middlewares/error-handling-middleware.js";
-
+import "dotenv/config";
 // CORS
 const corsOrigin = process.env.CORS_ORIGIN;
 app.use(
   cors({
-    origin: corsOrigin || "http://localhost:3000",
+    origin: corsOrigin || "http://localhost:3000", 
     methods: ["POST", "GET", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
