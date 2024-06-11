@@ -8,7 +8,7 @@ import "dotenv/config";
 const corsOrigin = process.env.CORS_ORIGIN;
 app.use(
   cors({
-    origin: corsOrigin || "http://localhost:3000", 
+    origin: corsOrigin || "http://localhost:3000",
     methods: ["POST", "GET", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
